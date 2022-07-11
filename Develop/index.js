@@ -6,7 +6,10 @@ const fs = require('fs')
 const generateMarkdown = require('./utils/generateMarkdown')
 
 //
-const questions = () => {
+const questions = readMeData => {
+    if (!readMeData) {
+        readMeData = []
+    }
     return inquirer.prompt([
         {
             type: 'input',
@@ -89,7 +92,25 @@ const questions = () => {
 function writeToFile(fileName, data) {}
 
 // TODO: Create a function to initialize app
-function init() {}
+function init() {
+    console.log(`
+    ===============================
+    Welcome to the README Generator
+    ===============================
+    `)
+}
 
 // Function call to initialize app
-init();
+init()
+    .then(questions)
+    .then(generateMarkdown)
+    .then(readMeData => {
+        const readMe = writeToFile(readMeData);
+
+        fs.writeFile('./README.md', readMe, err => {
+            if (err) throw new Error (err);
+
+            console.log('Your README has now been created!')
+        })
+    })
+;
