@@ -6,9 +6,9 @@ const fs = require('fs')
 const generateMarkdown = require('./utils/generateMarkdown')
 
 //
-const questions = readMeData => {
-    if (!readMeData) {
-        readMeData = []
+const readQuestions = readMeData => {
+    if (!readMeData.answers) {
+        readMeData.answers = [];
     }
     return inquirer.prompt([
         {
@@ -86,6 +86,10 @@ const questions = readMeData => {
             }
         }
     ])
+    .then(questionData => {
+        readMeData.answers.push(questionData);
+        return readMeData;
+    });
 };
 
 // TODO: Create a function to write README file
@@ -102,10 +106,9 @@ function init() {
 
 // Function call to initialize app
 init()
-    .then(questions)
-    .then(generateMarkdown)
+    .then(readQuestions)
     .then(readMeData => {
-        const readMe = writeToFile(readMeData);
+        const readMe = generateMarkdown(readMeData);
 
         fs.writeFile('./README.md', readMe, err => {
             if (err) throw new Error (err);
