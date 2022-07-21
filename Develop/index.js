@@ -1,15 +1,22 @@
-// TODO: Include packages needed for this application
-const inquirer = require('inquirer')
+// Packages needed for this application
+const inquirer = require('inquirer');
 
-const fs = require('fs')
+const fs = require('fs');
 
-const generateMarkdown = require('./utils/generateMarkdown')
+const generateMarkdown = require('./utils/generateMarkdown');
 
-//
+// Inquiries that the user needs to answer to build the README
 const readQuestions = readMeData => {
-    if (!readMeData.answers) {
-        readMeData.answers = [];
-    }
+    console.log(`
+    ===============================
+    Welcome to the README Generator
+    ===============================
+    `);
+
+  
+    readMeData.data = [];
+    
+
     return inquirer.prompt([
         {
             type: 'input',
@@ -50,6 +57,58 @@ const readQuestions = readMeData => {
             message: 'If you would like other developers to contribute, you can include guidelines on how to do so here.'
         },
         {
+            type: 'confirm',
+            name: 'confirmLicense',
+            message: 'Would you like to add any licenses to your README?',
+            default: true
+        },
+        {
+            type: 'list',
+            name: 'license',
+            message: 'Choose which licenses to add.',
+            choices: [
+                'Apache 2.0 License',
+                'Boost Software License 1.0', 
+                'BSD 3-Clause License',
+                'BSD 2-Clause License', 
+                'CC0',
+                'Attribution 4.0 International',
+                'Attribution-ShareAlike 4.0 International',
+                'Attribution-NonCommercial 4.0 International',
+                'Attribution-NoDerivatives 4.0 International',
+                'Attribution-NonCommercial-ShareAlike 4.0 International',
+                'Attribution-NonCommericla-NonDerivatives 4.0 International', 
+                'Eclipse Public License 1.0', 
+                'GNU GPL v3',
+                'GNU GPL v2',
+                'GNU AGPL v3',
+                'GNU LGPL v3',
+                'GNU FDL v1.3', 
+                'The Hippocratic License 2.1',
+                'The Hippocratic License 3.0', 
+                'IBM Public License Version 1.0', 
+                'ISC License (ISC)', 
+                'The MIT License', 
+                'Mozilla Public License 2.0', 
+                'Attribution License (BY)',
+                'Open Database License (ODbL)',
+                'Public Domain Dedication and License (PDDL)', 
+                'The Perl License', 
+                'The Artistic License',
+                'SIL Open Font License 1.1', 
+                'The Unlicense', 
+                'The Do What the F*** You Want to Public License', 
+                'The zlib/libpng License'
+            ],
+            when: ({confirmLicense}) => {
+                if (confirmLicense) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        {
             type: 'input',
             name: 'test',
             message: 'If you have written tests for your application, provide examples on how to run them here.'
@@ -87,26 +146,13 @@ const readQuestions = readMeData => {
         }
     ])
     .then(questionData => {
-        readMeData.answers.push(questionData);
+        readMeData.data.push(questionData);
         return readMeData;
     });
 };
 
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
-
-// TODO: Create a function to initialize app
-function init() {
-    console.log(`
-    ===============================
-    Welcome to the README Generator
-    ===============================
-    `)
-}
-
-// Function call to initialize app
-init()
-    .then(readQuestions)
+// Initalizes questionnaire, then sends the data to generateMarkdown to write the file
+readQuestions()
     .then(readMeData => {
         const readMe = generateMarkdown(readMeData);
 
