@@ -6,17 +6,16 @@ const fs = require('fs');
 const generateMarkdown = require('./utils/generateMarkdown');
 
 // Inquiries that the user needs to answer to build the README
-const readQuestions = readMeData => {
+const readQuestions = () => {
     console.log(`
     ===============================
     Welcome to the README Generator
     ===============================
     `);
 
-  
-    readMeData.data = [];
+    const readMeData = {};
+    readMeData.ans = [];
     
-
     return inquirer.prompt([
         {
             type: 'input',
@@ -65,7 +64,7 @@ const readQuestions = readMeData => {
         {
             type: 'list',
             name: 'license',
-            message: 'Choose which licenses to add.',
+            message: 'Choose which licenses to add. If unsure, you should read up on what each license means.',
             choices: [
                 'Apache 2.0 License',
                 'Boost Software License 1.0', 
@@ -145,9 +144,10 @@ const readQuestions = readMeData => {
             }
         }
     ])
-    .then(questionData => {
-        readMeData.data.push(questionData);
+    .then(answers => {
+        readMeData.ans.push(answers);
         return readMeData;
+        console.log(readMeData);
     });
 };
 
