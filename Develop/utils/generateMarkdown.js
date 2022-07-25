@@ -72,42 +72,46 @@ function renderLicenseSection(license) {
 };
 
 // generates the markdown for the README
-const generateMarkdown = markdownData => {
+const generateMarkdown = markdownArr => {
   return `
-  # ${title}
+  ${Object.values(markdownArr).map(({ title, license, description, installation, usage, credits, contribution, test, user, email }) => {
+    return `
+    # ${title}
 
-  ${renderLicenseSection(license)}
+    ${renderLicenseSection(license)}
 
-  ## Description
-  ${description}
+    ## Description
+    ${description}
 
-  ## Table of Contents
-  [Installation](#installation)
-  [Usage](#usage)
-  [Credits](#credits)
-  [Contribution Guidelines](#contribution)
-  [Testing](#testing)
-  [Contact Info](#contact)
+    ## Table of Contents
+    [Installation](#installation)
+    [Usage](#usage)
+    [Credits](#credits)
+    [Contribution Guidelines](#contribution)
+    [Testing](#testing)
+    [Contact Info](#contact)
 
-  ## Installation
-  ${installation}
+    ## Installation
+    ${installation}
 
-  ## Usage
-  ${usage}
+    ## Usage
+    ${usage}
 
-  ## Credits
-  ${credits}
+    ## Credits
+    ${credits}
 
-  ## Contribution Guidelines
-  ${contribution}
+    ## Contribution Guidelines
+    ${contribution}
 
-  ## Testing
-  ${test}
+    ## Testing
+    ${test}
 
-  ## Contact 
-  ${user}
-  You can reach me at ${email} for further inquiries.
+    ## Contact 
+    ${user}
+    You can reach me at ${email} for further inquiries.
 
+  `;
+})}
 `;
 };
 

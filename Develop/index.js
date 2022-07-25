@@ -5,16 +5,15 @@ const fs = require('fs');
 
 const generateMarkdown = require('./utils/generateMarkdown');
 
+const readMeData = [];
+
 // Inquiries that the user needs to answer to build the README
-const readQuestions = () => {
+const promptQuestions = () => {
     console.log(`
     ===============================
     Welcome to the README Generator
     ===============================
     `);
-
-    const readMeData = {};
-    readMeData.ans = [];
     
     return inquirer.prompt([
         {
@@ -145,14 +144,13 @@ const readQuestions = () => {
         }
     ])
     .then(answers => {
-        readMeData.ans.push(answers);
+        readMeData.push(answers);
         return readMeData;
-        console.log(readMeData);
     });
 };
 
 // Initalizes questionnaire, then sends the data to generateMarkdown to write the file
-readQuestions()
+promptQuestions()
     .then(readMeData => {
         const readMe = generateMarkdown(readMeData);
 
